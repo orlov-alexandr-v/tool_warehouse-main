@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список инструмента</title>
+    <link rel="stylesheet" href="css/list.css">
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32">
+</head>
+<body>
+<div class="container">
+    <h1>Список инструмента</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0; font-size: 20px; font-weight: 500;">Поиск инструмента</h2>
+    <a href="index.html" class="btn-home">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 9L12 2l9 7-4 4-9 7-9-7-4-4z"></path>
+        </svg>
+        На главную
+    </a>
+    </div>
+    <!-- Блок поиска -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Поиск по D, Name, Type...">
+        <button id="clearSearchBtn" class="btn-control secondary">Сброс</button>
+    </div>
+    <!-- Список инструментов -->
+    <ul id="toolsList" class="tools-list"></ul>
+    <!-- Сообщения (ошибки/успех) -->
+    <div id="message" class="status-message"></div>
+    <!-- Пагинация (перемещена вниз) -->
+    <div id="pagination" class="pagination-controls">
+        <button id="prevBtn" disabled>Назад</button>
+        <span id="pageInfo"></span>
+        <button id="nextBtn" disabled>Вперед</button>
+    </div>
+</div>
+<script src="js/list.js" defer></script>
+</body>
+</html>

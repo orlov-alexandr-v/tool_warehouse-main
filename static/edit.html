@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование инструмента</title>
+    <link rel="stylesheet" href="css/edit.css">
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32">
+</head>
+<body>
+<div class="container">
+    <h1>Редактирование инструмента</h1>
+    <div id="errorState"></div>
+    <form id="editForm" style="display: none;">
+        <div class="form-group">
+            <label for="name">Наименование:</label>
+            <input type="text" id="name" required>
+        </div>
+        <div class="form-group">
+            <label for="type">Тип:</label>
+            <input type="text" id="type" required>
+        </div>
+        <div class="form-group">
+            <label for="d">Диаметр (D):</label>
+            <input type="text" id="d" required>
+        </div>
+        <!-- Характеристики в две колонки -->
+        <div class="form-group">
+            <label>Характеристики:</label>
+            <div class="field-row">
+                <div class="form-group">
+                    <label for="L">L (общая длина):</label>
+                    <input type="text" id="L">
+                </div>
+                <div class="form-group">
+                    <label for="S">S (диаметр хвостовика):</label>
+                    <input type="text" id="S">
+                </div>
+                <div class="form-group">
+                    <label for="I">I (длина рабочей части):</label>
+                    <input type="text" id="I">
+                </div>
+                <div class="form-group">
+                    <label for="Z">Z (количество зубьев):</label>
+                    <input type="text" id="Z">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="kol">Количество:</label>
+            <input type="number" id="kol" required min="0">
+        </div>
+        <div class="form-group">
+            <label for="price_per_unit">Цена за 1 шт.:</label>
+            <input type="number" id="price_per_unit" step="0.01" min="0" placeholder="0.00">
+        </div>
+        <div class="form-group">
+            <label for="manufacturer_url">Ссылка на инт.магазин:</label>
+            <input type="text" id="manufacturer_url" placeholder="https://...">
+        </div>
+        <div class="actions">
+            <button type="button" class="back" onclick="goBackToList()">Отмена</button>
+            <button type="submit" class="save">Сохранить</button>
+        </div>
+    </form>
+    <div id="message" class="status-message"></div>
+</div>
+<script src="js/edit.js" defer></script>
+</body>
+</html>

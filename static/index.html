@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Склад инструмента</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32">
+</head>
+<body>
+<div class="container">
+    <h1>Управление складом инструмента</h1>
+    <!-- Блок навигации -->
+    <div class="section">
+        <h2>Склад:</h2>
+        <div class="tools-buttons">
+            <a href="list.html" class="btn btn-success">
+                <i class="ph-list"></i> Список
+            </a>
+            <a href="users.html" class="btn btn-success">
+                <i class="ph-users"></i> Сотрудники
+            </a>
+            <a href="report.html" class="btn btn-success">
+                <i class="ph-file-text"></i> Отчет
+            </a>
+        </div>
+    </div>
+    <!-- Блок действий -->
+    <div class="section">
+        <h2>Инструмент:</h2>
+        <div class="tools-buttons">
+            <a id="openModalBtn" class="btn btn-primary">
+                <i class="ph-plus-circle"></i> Добавить инструмент
+            </a>
+            <a href="tools_to_issue.html" class="btn btn-primary">
+                <i class="ph-arrow-bend-up-left"></i> Выдать инструмент
+            </a>
+            <a href="history_to_tools.html" class="btn btn-primary">
+                <i class="ph-clock-counter-clockwise"></i> История выдачи
+            </a>
+        </div>
+    </div>
+    <div id="message" class="status-message"></div>
+    <div class="wrapper">
+        <img src="images/cnc2.png" alt="CNC">
+    </div>
+</div>
+<!-- Модальное окно -->
+<div id="addModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Добавление нового инструмента</h3>
+            <button class="close-modal-btn" aria-label="Закрыть">&times;</button>
+        </div>
+        <form id="createForm">
+            <div class="form-group">
+                <label for="type">Тип:</label>
+                <input type="text" id="type" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Название:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="d">Диаметр (D):</label>
+                <input type="text" id="d" required>
+            </div>
+            <div class="form-group">
+                <label for="s">Диаметр хвост. (d):</label>
+                <input type="text" id="s">
+            </div>
+            <div class="form-group">
+                <label for="l">Длина общая (L):</label>
+                <input type="text" id="l">
+            </div>
+            <div class="form-group">
+                <label for="i">Длина рабочей части (I):</label>
+                <input type="text" id="i">
+            </div>
+            <div class="form-group">
+                <label for="z">Параметр Z:</label>
+                <input type="text" id="z">
+            </div>
+            <div class="form-group">
+                <label for="kol">Количество:</label>
+                <input type="number" id="kol" required>
+            </div>
+            <div class="form-group">
+                <label for="price_per_unit">Цена за 1 шт.:</label>
+                <input type="number" id="price_per_unit" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label for="manufacturer_url">Ссылка на производителя:</label>
+                <input type="url" id="manufacturer_url" placeholder="https://example.com">
+            </div>
+            <div class="modal-actions">
+                <button type="submit">Добавить</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="js/index.js" defer></script>
+</body>
+</html>

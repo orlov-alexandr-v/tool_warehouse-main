@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчет по складу инструмента</title>
+    <link rel="stylesheet" href="css/report.css">
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32">
+</head>
+<body>
+<div class="container">
+    <h1>Отчет по складу инструмента</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0; font-size: 20px; font-weight: 500;">Сводные данные</h2>
+        <a href="index.html" class="btn-home">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 9L12 2l9 7-4 4-9 7-9-7-4-4z"></path>
+            </svg>
+            На главную
+        </a>
+    </div>
+    <!-- Блок показателей (центральный блок удален) -->
+    <div class="report-grid">
+        <!-- 1. Общая стоимость -->
+        <div class="report-card">
+            <h3>Общая стоимость склада:</h3>
+            <div class="stat-value" id="totalCost">0.00 ₽</div>
+            <div class="stat-label">Расчет на основе текущих остатков и цен</div>
+        </div>
+        <!-- 2. Список для заказа -->
+        <div class="report-card">
+            <h3>Список фрез для заказа:</h3>
+            <ul id="orderList" class="order-list">
+                <!-- Сюда JS вставит позиции -->
+            </ul>
+            <div id="orderEmpty" style="padding: 10px 0; color: #28a745; font-style: italic; display: none;">
+                Все позиции в наличии.
+            </div>
+        </div>
+    </div>
+    <div id="message" class="status-message"></div>
+</div>
+<script src="js/report.js"></script>
+</body>
+</html>
