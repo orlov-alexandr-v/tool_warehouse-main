@@ -9,8 +9,8 @@ app = FastAPI(title="Tool Warehouse API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000"],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["authorization", "content-type"],
 )
