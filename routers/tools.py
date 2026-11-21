@@ -18,7 +18,6 @@ def create_new_tool(tool: schemas.ToolCreate, db: Session = Depends(database.get
 @router.get("/", response_model=List[schemas.Tool])
 def read_tools(
     skip: int = Query(0, ge=0),
-    limit: int = Query(4, ge=1, le=100),
     search_d: str = Query(None, description="Search by Diameter (D)"),
     search_type: str = Query(None, description="Search by Type"),
     search_name: str = Query(None, description="Search by Name"),

@@ -33,13 +33,7 @@ class ToolUpdate(BaseModel):
 class Tool(ToolBase):
     id: int
     total_cost: Optional[float] = None # Поле для общей стоимости
-
-    @model_validator(mode='after')
-    def calculate_total_cost(self):
-        # self.Kol и self.price_per_unit здесь уже гарантированно являются int и float
-        self.total_cost = self.Kol * (self.price_per_unit or 0.0)
-        return self
-
+    
     class Config:
         from_attributes = True
 
@@ -55,9 +49,6 @@ class User(BaseModel):
 class UserCreat(User):
     name: str = Field(..., alias='Name')
     surname: str = Field(..., alias='Surname')
-
-    class Config:
-        populate_by_name = True
 
 class ReadUser(User):
     id: int

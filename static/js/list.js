@@ -38,12 +38,7 @@ async function fetchTools(page = 1, search = null) {
     currentPage = page;
     currentSearch = search;
 
-    let url = `${API_URL}/tools/?skip=${(page - 1) * LIMIT}&limit=${LIMIT + 1}`;
-    /*
-       Запрашиваем LIMIT + 1 элемент.
-       Это "хак": если пришло 11 элементов (при лимите 10), значит есть следующая страница.
-       11-й элемент мы не рисуем, он нужен только для логики nextBtn.
-    */
+    let url = `${API_URL}/tools/`;
 
     if (search) {
         const params = new URLSearchParams();
