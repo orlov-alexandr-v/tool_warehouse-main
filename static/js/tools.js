@@ -1,4 +1,4 @@
-const API_URL = 'http://127.0.0.1:8000'; // Замените на ваш URL бэкенда
+const API_URL = 'http://localhost:8000'; // Замените на ваш URL бэкенда
 
 let debounceTimer = null;
 const DEBOUNCE_DELAY = 300;
