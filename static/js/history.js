@@ -1,6 +1,6 @@
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://127.0.0.1:8000';
 
-let allHistoryData = []; // Сюда сохранится ВЕСЬ массив с бэкенда
+let allHistoryData = [];
 let currentPage = 1;
 const LIMIT = 10;
 
@@ -54,79 +54,50 @@ function sortHistory(data, key, direction) {
     return sorted;
 }
 
-//функция загрузки
+// Функция загрузки
 async function fetchHistory() {
     const userQuery = searchUser.value.trim();
     const toolQuery = searchTool.value.trim();
 
     try {
-        // 1. Проверка базового URL
-        console.log('Базовый API_URL из константы:', API_URL);
-
         const url = new URL(`${API_URL}/history/`);
-
-        // Раскомментируйте эти строки, если хотите проверить передачу фильтров
         if (userQuery) url.searchParams.append('search_user', userQuery);
         if (toolQuery) url.searchParams.append('search_tool', toolQuery);
 
-        // 2. Проверка итогового URL, который уходит в сеть
-        console.log('Итоговый URL запроса:', url.toString());
-
         const response = await fetch(url);
 
-        // 3. Проверка статуса и заголовков ответа
-        console.log('Статус ответа (response.status):', response.status);
-        console.log('OK (response.ok):', response.ok);
-        console.log('Заголовки ответа (response.headers):', Object.fromEntries(response.headers.entries()));
-
-        // Если бэкенд вернул 404 или 500, response.ok будет false
         if (!response.ok) {
-            // 4. Получение текста ошибки от сервера (FastAPI часто присылает JSON с деталями)
             const errorText = await response.text();
-            console.error('Текст тела ошибки от сервера:', errorText);
-
-            // Выкидываем ошибку, чтобы попасть в catch
             throw new Error(`Server error: ${response.status}. Body: ${errorText}`);
         }
 
-        // 5. Проверка полученных данных до сортировки
         const rawData = await response.json();
-        console.log('Сырой JSON с бэкенда:', rawData);
-
-        // Сохраняем ВСЕ данные
         allHistoryData = rawData;
-
-        // Сразу сортируем по дате (новые сверху) после получения
         allHistoryData = sortHistory(allHistoryData, 'issue_date', 'desc');
-
         renderTable();
     } catch (error) {
-        // 6. Ловим сетевые ошибки (CORS, DNS, обрыв соединения)
-        console.error('Критическая ошибка fetch (сетевая или синтаксис JSON):', error);
+        console.error('Критическая ошибка fetch:', error);
         showMessage('Ошибка при загрузке истории', true);
     }
 }
 
-// Функция отрисовки (теперь берет срез из allHistoryData)
+// Функция отрисовки
 function renderTable() {
     const userQuery = searchUser.value.trim().toLowerCase();
     const toolQuery = searchTool.value.trim().toLowerCase();
 
-    // 1. Фильтрация
+    // 1. Фильтрация с защитой от null
     let filteredData = allHistoryData.filter(item => {
-
-        // Защита от null/undefined в user_fio
         const user_fio_for_search = item.user_fio ? item.user_fio.toLowerCase() : "";
         const userMatch = user_fio_for_search.includes(userQuery);
 
-        // Защита от null/undefined в tool_name
         const tool_name_for_search = item.tool_name ? item.tool_name.toLowerCase() : "";
         const toolMatch = tool_name_for_search.includes(toolQuery);
 
         return userMatch && toolMatch;
     });
 
-    // 2. Пагинация (срез массива)
+    // 2. Пагинация
     const start = (currentPage - 1) * LIMIT;
     const end = start + LIMIT;
     const pageData = filteredData.slice(start, end);
@@ -136,13 +107,11 @@ function renderTable() {
 
     if (pageData.length === 0) {
         const row = document.createElement('tr');
-        // Выводим заглушку на все 5 колонок (span нужен для корректного colspan)
         row.innerHTML = `<td colspan="5" style="text-align: center; color: #777; padding: 40px;">Записи не найдены</td>`;
         historyBody.appendChild(row);
     } else {
         pageData.forEach(item => {
             const row = document.createElement('tr');
-            // Кнопка добавлена здесь, в каждой строке с данными
             row.innerHTML = `
                 <td>${formatDate(item.issue_date)}</td>
                 <td>${item.user_fio}</td>
@@ -166,7 +135,7 @@ function renderTable() {
 
 /* --- ОБРАБОТЧИКИ --- */
 
-// Сортировка по клику (теперь работает мгновенно)
+// Сортировка по клику
 tableHead.addEventListener('click', (event) => {
     const th = event.target.closest('th');
     if (!th || !th.dataset.key) return;
@@ -177,19 +146,17 @@ tableHead.addEventListener('click', (event) => {
         direction = 'desc';
     }
 
-    // Обновляем классы в заголовках
     Array.from(tableHead.querySelectorAll('th')).forEach(header => {
         header.classList.remove('sort-asc', 'sort-desc');
     });
     th.classList.add(direction === 'asc' ? 'sort-asc' : 'sort-desc');
 
-    // Сортируем данные в памяти
     allHistoryData = sortHistory(allHistoryData, key, direction);
     currentPage = 1;
     renderTable();
 });
 
-// Поиск (фильтрует уже загруженный массив)
+// Поиск
 function handleSearchInput() {
     currentPage = 1;
     renderTable();
@@ -200,7 +167,7 @@ searchTool.addEventListener('input', handleSearchInput);
 clearSearchBtn.addEventListener('click', () => {
     searchUser.value = '';
     searchTool.value = '';
-    fetchHistory(); // Перезагружаем полный список с бэкенда
+    fetchHistory();
 });
 
 // Пагинация
@@ -222,8 +189,6 @@ async function deleteHistoryItem(historyId) {
 
         if (response.ok) {
             showMessage('Запись успешно удалена');
-            // После успешного удаления перезагружаем данные с сервера,
-            // чтобы обновить пагинацию и фильтры
             fetchHistory();
         } else {
             const errorData = await response.json();
@@ -234,12 +199,10 @@ async function deleteHistoryItem(historyId) {
     }
 }
 
-// Делегирование клика по кнопке удаления (работает быстрее, чем добавлять listener в цикле)
+// Делегирование клика по кнопке удаления
 historyBody.addEventListener('click', (event) => {
     if (event.target.classList.contains('btn-delete')) {
         const historyId = event.target.dataset.id;
-
-        // Подтверждение удаления
         if (confirm('Вы уверены, что хотите удалить эту запись?')) {
             deleteHistoryItem(historyId);
         }

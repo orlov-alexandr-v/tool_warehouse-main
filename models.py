@@ -18,7 +18,6 @@ class Tool(Base):
     price_per_unit = Column(Float, default=0.0)
     manufacturer_url = Column(String, nullable=True)
 
-    # Используем backref со строковым именем класса
     history = relationship("HistoryTool", backref=backref("tool", lazy="select"))
 
 class User(Base):

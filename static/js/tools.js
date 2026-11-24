@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000'; // Замените на ваш URL бэкенда
+const API_URL = 'http://127.0.0.1:8000'; // Замените на ваш URL бэкенда
 
 let debounceTimer = null;
 const DEBOUNCE_DELAY = 300;
@@ -129,9 +129,9 @@ issueForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const payload = {
-    user_id: Number(userSelect.value),
-    tool_id: Number(selectedToolId.value),
-    quantity: Number(quantityInput.value)
+        user_id: Number(userSelect.value),
+        tool_id: Number(selectedToolId.value),
+        quantity: Number(quantityInput.value)
     };
 
     // Проверка на наличие выбранного инструмента

@@ -1,8 +1,10 @@
-from sqlalchemy.orm import Session, selectinload, session
+from sqlalchemy.orm import Session, selectinload
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_, func
 from fastapi.exceptions import HTTPException
 from typing import List
+
+from info import wrate_info
 import models
 import schemas
 
@@ -37,6 +39,8 @@ def create_tool(db: Session, tool: schemas.ToolCreate):
     db.add(db_tool)
     db.commit()
     db.refresh(db_tool)
+    #Сохранение лога добавления
+    wrate_info.wrate(f"Создан инструмент: {tool_data['Name']}; D: {tool_data['D']}; Количество: {tool_data['Kol']}")
 
     return db_tool
 
@@ -51,6 +55,9 @@ def update_tool(db: Session, tool_id: int, tool_update: schemas.ToolUpdate):
     for var, value in tool_data.items():
         setattr(db_tool, var, value)
 
+    #Сохранение лога изменения
+    wrate_info.wrate(f"Изменен инструмент: {tool_data['Name']}")
+
     db.commit()
     db.refresh(db_tool)
 
@@ -60,6 +67,12 @@ def delete_tool(db: Session, tool_id: int):
     db_tool = db.query(models.Tool).filter(models.Tool.id == tool_id).first()
     if not db_tool:
         return None
+
+    #Сохранение лога удаления
+    name = db_tool.__getattribute__("Name")
+    d = db_tool.__getattribute__("D")
+    wrate_info.wrate(f"Удален инструмент: {name}; D: {d}")
+
     db.delete(db_tool)
     db.commit()
 
@@ -194,7 +207,7 @@ def get_history_list(
 
 def delete_history(db: Session, history_id: int):
     history = db.query(models.HistoryTool).filter(models.HistoryTool.id == history_id).first()
-    
+
     if not history:
         return False
 

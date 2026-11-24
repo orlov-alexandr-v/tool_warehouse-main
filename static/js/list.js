@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://127.0.0.1:8000';
 
 let currentPage = 1;
 let currentSearch = null;
@@ -38,7 +38,12 @@ async function fetchTools(page = 1, search = null) {
     currentPage = page;
     currentSearch = search;
 
-    let url = `${API_URL}/tools/`;
+    let url = `${API_URL}/tools/?skip=${(page - 1) * LIMIT}&limit=${LIMIT + 1}`;
+    /*
+       Запрашиваем LIMIT + 1 элемент.
+       Это "хак": если пришло 11 элементов (при лимите 10), значит есть следующая страница.
+       11-й элемент мы не рисуем, он нужен только для логики nextBtn.
+    */
 
     if (search) {
         const params = new URLSearchParams();
@@ -144,15 +149,10 @@ let inputTimer = null;
 const DEBOUNCE_DELAY = 300;
 
 searchInput.addEventListener('input', (event) => {
-    // 1. Нормализация: убираем лишние пробелы и приводим разделители к единому виду (точка)
     let query = event.target.value.trim().replace(/,/g, '.');
-    // Если вы хотите, чтобы поиск по имени нечувствительно относился к регистру на уровне JS,
-    // можно сделать query = query.toLowerCase(); (но лучше, чтобы это делал сервер)
     event.target.value = query;
-
     if (inputTimer) clearTimeout(inputTimer);
 
-    // Если поле пустое — сбрасываем поиск
     if (!query) {
         inputTimer = setTimeout(() => {
             fetchTools(1, null);
@@ -163,25 +163,18 @@ searchInput.addEventListener('input', (event) => {
     inputTimer = setTimeout(() => {
         const searchPayload = {};
 
-        // 2. Проверка для числового поля D:
-         const isPureNumber = /^[\d.-]+$/.test(query);
+        const isPureNumber = /^[\d.-]+$/.test(query);
 
-        if (isPureNumber) {
-            searchPayload.d = query;
-        }
-
-        // 3. Поиск по имени:
-        if (!isPureNumber || /[a-zA-Z]/.test(query)) {
+        if (isPureNumber || /[a-zA-Z]/.test(query)) {
             searchPayload.name = query;
         }
 
-        // 3. Поиск по типу:
         if (isPureNumber || /[а-яА-Я]/.test(query)) {
             searchPayload.type = query;
         }
-
-        // Отправляем запрос. Если isPureNumber=true и букв нет, payload будет {d: "..."}.
-        // Если есть буквы, payload будет {d: "...", name: "..."}.
+        if (isPureNumber) {
+            searchPayload.d = query;
+        }
         fetchTools(1, searchPayload);
     }, DEBOUNCE_DELAY);
 });
